@@ -1,11 +1,15 @@
 package com.udacity.gradle.builditbigger;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ProgressBar;
+
+import com.dutchcrft.android.jokedisplay.JokeActivity;
+import com.udacity.gradle.builditbigger.backend.EndpointsAsyncTask;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -39,9 +43,21 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void tellJoke(View view){
-        Toast.makeText(this, "derp", Toast.LENGTH_SHORT).show();
-    }
+    public void tellJoke(View view) {
+        final ProgressBar spinner = (ProgressBar) findViewById(R.id.progressBar);
+        spinner.setVisibility(View.VISIBLE);
 
+        new EndpointsAsyncTask().execute(new EndpointsAsyncTask.EndpointCallbackInterface() {
+
+            @Override
+            public void OnJokeLoaded(final String result) {
+                Intent intent = new Intent(getApplicationContext(), JokeActivity.class);
+                intent.putExtra("joke", result);
+                startActivity(intent);
+                spinner.setVisibility(View.GONE);
+            }
+
+        });
+    }
 
 }
