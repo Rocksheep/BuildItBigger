@@ -35,3 +35,29 @@ dependencies {
     compile 'junit:junit:4.12'
     freeCompile 'com.google.android.gms:play-services-ads:8.4.0'
 }
+
+task runTests {
+    dependsOn "connectedAndroidTest"
+    mustRunAfter ":backend:appengineRun"
+
+    doLast {
+        println "HEY THERE"
+    }
+}
+
+task testCalls {
+    dependsOn ":backend:appengineRun"
+    dependsOn runTests
+    dependsOn ":backend:appengineStop"
+    evaluationDependsOn ":backend"
+
+    project(":backend") {
+        appengine {
+            daemon true
+        }
+    }
+
+    doLast {
+        println "JobDone"
+    }
+}
