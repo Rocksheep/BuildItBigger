@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.dutchcrft.android.jokedisplay.JokeActivity;
 import com.google.android.gms.ads.AdListener;
@@ -62,18 +63,28 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             public void OnJokeLoaded(final String result) {
-                mInterstitialAd.setAdListener(new AdListener() {
-                    @Override
-                    public void onAdClosed() {
-                        Intent intent = new Intent(getApplicationContext(), JokeActivity.class);
-                        intent.putExtra("joke", result);
-                        startActivity(intent);
-                        requestNewInterstitialAd();
-                        spinner.setVisibility(View.GONE);
+                if (!result.isEmpty()) {
+                    mInterstitialAd.setAdListener(new AdListener() {
+                        @Override
+                        public void onAdClosed() {
+                            Intent intent = new Intent(getApplicationContext(), JokeActivity.class);
+                            intent.putExtra("joke", result);
+                            startActivity(intent);
+                            requestNewInterstitialAd();
+                            spinner.setVisibility(View.GONE);
+                        }
+                    });
+                    if (mInterstitialAd.isLoaded()) {
+                        mInterstitialAd.show();
                     }
-                });
-                if (mInterstitialAd.isLoaded()) {
-                    mInterstitialAd.show();
+                }
+                else {
+                    Toast.makeText(
+                            getApplicationContext(),
+                            getString(R.string.no_connection),
+                            Toast.LENGTH_LONG
+                    ).show();
+                    spinner.setVisibility(View.GONE);
                 }
             }
 

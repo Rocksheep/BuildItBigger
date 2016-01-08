@@ -37,7 +37,7 @@ public class EndpointsAsyncTask extends AsyncTask<EndpointsAsyncTask.EndpointCal
             return sMyApiService.getJoke().execute().getJoke();
         }
         catch (IOException e) {
-            return e.getMessage();
+            return "";
         }
     }
 

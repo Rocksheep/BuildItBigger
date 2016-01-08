@@ -41,6 +41,6 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         mCountDownLatch.await();
 
         assertNotNull(mJoke);
-        assertTrue(mJoke.startsWith("joke: "));
+        assertTrue(!mJoke.isEmpty());
     }
 }
